@@ -1,566 +1,284 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="theme-color" content="#0B0C10" />
-  <title>CASH КАЛЬКУЛЯТОР</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ЗПШКА — калькулятор зарплаты</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f4fb;--c:#fff;--c2:#ebeef8;--l:#dde1f0;--t:#121528;--m:#667090;--a:#4562f0;--ok:#0e9f6e;--wn:#c77700;--bd:#d93450;--vi:#7c5cf0;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0e1a;--c:#151829;--c2:#0e1020;--l:#262a42;--t:#eef0fa;--m:#8e94b3;--a:#6c8cff;--ok:#4ade9b;--wn:#ffb454;--bd:#ff6b7a;--vi:#a78bfa;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c0e1a;--c:#151829;--c2:#0e1020;--l:#262a42;--t:#eef0fa;--m:#8e94b3;--a:#6c8cff;--ok:#4ade9b;--wn:#ffb454;--bd:#ff6b7a;--vi:#a78bfa;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--t);font:15px/1.45 "Golos Text",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+main{max-width:560px;margin:0 auto;padding:20px 16px 110px}
+header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px}
+h1{font:800 34px/1 Unbounded,"Golos Text",sans-serif;margin:0;letter-spacing:-.02em}
+h1 span{color:var(--a)}
+header p{margin:8px 0 0;color:var(--m);font-size:13px}
+h2{font:600 13px "Golos Text",sans-serif;color:var(--m);margin:0 0 12px;display:flex;gap:8px;align-items:center;justify-content:space-between}
+.card{background:var(--c);border:1px solid var(--l);border-radius:20px;padding:16px;margin:12px 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.g2:last-child{margin-bottom:0}
+label{display:block;font-size:12px;color:var(--m);font-weight:500}
+.in{display:block;width:100%;margin-top:6px;background:var(--c2);border:1px solid var(--l);color:var(--t);border-radius:12px;padding:12px 13px;font:600 16px "Golos Text",sans-serif;outline:none;transition:border-color .2s;-moz-appearance:textfield}
+.in::-webkit-inner-spin-button,.in::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.in:focus{border-color:var(--a)}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.bt,#th{background:var(--c2);color:var(--t);border:1px solid var(--l);border-radius:12px;padding:11px 12px;font:600 14px "Golos Text",sans-serif;cursor:pointer}
+#th{width:42px;height:42px;padding:0;font-size:18px;border-radius:50%}
+.bt:active{transform:scale(.98)}
+.chip{font:700 12px "Golos Text",sans-serif;padding:3px 10px;border-radius:99px;color:var(--a);background:color-mix(in srgb,var(--a) 16%,transparent);white-space:nowrap}
+.chip.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,transparent)}
+.chip.wn{color:var(--wn);background:color-mix(in srgb,var(--wn) 16%,transparent)}
+.chip.bd{color:var(--bd);background:color-mix(in srgb,var(--bd) 16%,transparent)}
+.chip.vi{color:var(--vi);background:color-mix(in srgb,var(--vi) 18%,transparent)}
+.k{background:var(--c2);border:1px solid var(--l);border-radius:16px;padding:12px;margin-bottom:10px}
+.kh{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.kn{flex:1;min-width:0;background:none;border:0;color:var(--t);font:700 16px "Golos Text",sans-serif;outline:none;padding:2px 0}
+.x{background:none;border:0;color:var(--m);font-size:22px;line-height:1;cursor:pointer;padding:0 4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:9px;margin:14px 0 6px;outline-offset:6px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--a)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#fff;border:4px solid var(--a)}
+input[type=range]::-moz-range-track{background:transparent}
+.kb{display:flex;justify-content:space-between;font-size:13px;color:var(--m)}
+.kb b{color:var(--t)}
+.btns{margin:2px 0 0}
+a.chip{text-decoration:none;cursor:pointer;transition:opacity .2s}
+a.chip:active{opacity:.6}
+.pf{display:flex;align-items:center;gap:5px;font:700 11px "Golos Text",sans-serif;color:var(--m);padding:3px 9px;border-radius:99px;border:1px solid var(--l);cursor:pointer}
+.pf input{accent-color:var(--vi);margin:0}
+.pf:has(input:checked){color:var(--vi);border-color:var(--vi);background:color-mix(in srgb,var(--vi) 14%,transparent)}
+.slip{border:1.5px solid var(--a)}
 
-  <style>
-    /* --- iOS SF Pro Font System --- */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
 
-    :root {
-      --bg-primary: #0B0C10;
-      --bg-secondary: #13151A;
-      --bg-tertiary: #1A1D24;
-      
-      --glass-bg: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-      
-      --accent-primary: #4C7DFF;
-      --accent-gradient: linear-gradient(135deg, #4C7DFF 0%, #6A8DFF 100%);
-      --accent-glow: rgba(76, 125, 255, 0.3);
-      
-      --text-primary: #FFFFFF;
-      --text-secondary: rgba(255, 255, 255, 0.7);
-      --text-tertiary: rgba(255, 255, 255, 0.4);
-      
-      --danger: #FF453A;
-    }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 20px 16px 40px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .app-container {
-      width: 100%;
-      max-width: 430px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .app-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 10px;
-      margin-bottom: 4px;
-    }
-    .app-title {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-    .app-title span {
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .header-badge {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 6px 12px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      color: var(--text-tertiary);
-      backdrop-filter: blur(10px);
-    }
-
-    .card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 20px;
-      box-shadow: var(--glass-shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .card-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .card-title svg {
-      width: 18px; height: 18px;
-      fill: var(--accent-primary);
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .input-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-tertiary);
-      margin-left: 4px;
-    }
-    select, input[type="number"], input[type="text"] {
-      width: 100%;
-      height: 54px;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 0 16px;
-      color: var(--text-primary);
-      font-size: 16px;
-      font-weight: 500;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.2s, box-shadow 0.2s;
-    }
-    select:focus, input:focus {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .controls-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .kpi-item {
-      background: rgba(0,0,0,0.3);
-      border-radius: 16px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      position: relative;
-    }
-    .kpi-title-sm {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .kpi-input-group {
-      display: flex;
-      gap: 8px;
-    }
-    .kpi-input-group input {
-      flex: 1;
-      height: 40px;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 14px;
-      padding: 0 4px;
-    }
-
-    /* Toggle Chip for P4P */
-    .p4p-toggle {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: color 0.2s;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid transparent;
-    }
-    .p4p-toggle.active {
-      color: var(--accent-primary);
-      border-color: rgba(76, 125, 255, 0.3);
-      background: rgba(76, 125, 255, 0.1);
-    }
-    .p4p-toggle input {
-      display: none;
-    }
-    .p4p-toggle .check {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border-radius: 4px;
-      border: 2px solid var(--text-tertiary);
-      position: relative;
-    }
-    .p4p-toggle.active .check {
-      border-color: var(--accent-primary);
-      background: var(--accent-primary);
-    }
-    .p4p-toggle.active .check::after {
-      content: '✓';
-      position: absolute;
-      top: -2px;
-      left: 1px;
-      font-size: 12px;
-      color: white;
-    }
-
-    .btn-calc {
-      width: 100%;
-      height: 60px;
-      border: none;
-      border-radius: 20px;
-      font-family: inherit;
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-      background: var(--accent-gradient);
-      box-shadow: 0 10px 30px -5px var(--accent-glow);
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.2s ease;
-      letter-spacing: 0.3px;
-      margin-top: 8px;
-    }
-    .btn-calc:active {
-      transform: scale(0.96);
-      box-shadow: 0 4px 15px var(--accent-glow);
-    }
-
-    .result-card {
-      background: rgba(76, 125, 255, 0.05);
-      border: 1px solid rgba(76, 125, 255, 0.15);
-    }
-    .result-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-    }
-    .result-row:not(:last-child) {
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .res-label { font-size: 15px; color: var(--text-secondary); }
-    .res-val { font-size: 16px; font-weight: 600; }
-    
-    .total-row {
-      margin-top: 8px;
-      padding-top: 12px;
-      border-top: 2px solid var(--accent-primary) !important;
-    }
-    .total-row .res-label, .total-row .res-val {
-      font-size: 22px;
-      font-weight: 800;
-      color: white;
-    }
-
-    @media(max-width: 480px) {
-      .controls-grid, .kpi-grid { grid-template-columns: 1fr; }
-      .kpi-grid { gap: 16px; }
-    }
-  </style>
+.tot{font:800 30px/1.1 Unbounded,"Golos Text",sans-serif;letter-spacing:-.03em;margin:4px 0 14px;word-break:break-all}
+.tot i{font:700 26px "Golos Text",sans-serif;color:var(--a);margin-left:6px}
+.mix{display:flex;height:10px;border-radius:9px;overflow:hidden;gap:2px}
+.mix b{display:block;min-width:0;transition:width .4s}
+.lg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--m);margin:8px 0 12px}
+.lg u{text-decoration:none;display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.r{display:flex;align-items:baseline;gap:8px;padding:5px 0;font-size:14px}
+.r i{flex:1;border-bottom:1px dotted var(--l);transform:translateY(-3px);min-width:12px}
+.r.s{color:var(--m);font-size:13px;padding-left:12px}
+.r.t{font-weight:700;padding-top:10px}
+.r.t span,.r b{white-space:nowrap}
+.sc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.sc div{background:var(--c2);border-radius:12px;padding:10px;font-size:11px;color:var(--m)}
+.sc b{display:block;color:var(--t);font-size:13px;margin-top:3px}
+details summary{cursor:pointer;font-weight:600;color:var(--m);font-size:13px}
+details[open] summary{margin-bottom:12px}
+.mx{display:grid;grid-template-columns:70px repeat(3,1fr);gap:8px;align-items:center;font-size:12px;color:var(--m);margin:6px 0 12px}
+.mx .in{margin:0;padding:10px 8px;text-align:center}
+.hint{font-size:12px;color:var(--m);margin:0 0 12px}
+#bar{position:fixed;left:0;right:0;bottom:0;padding:10px max(16px,calc(50% - 264px)) calc(10px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--c) 90%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--l);display:flex;justify-content:space-between;align-items:center;transition:transform .25s;cursor:pointer}
+#bar.h{transform:translateY(120%)}
+#bar span{font-size:12px;color:var(--m)}
+#bar b{font:700 20px Unbounded,"Golos Text",sans-serif}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-
 <body>
+<main>
+<header>
+ <div><h1>ЗПШКА<span> ₽</span></h1><p></p></div>
+ <div style="display:flex;gap:8px;align-items:center"><a class="chip" id="dev" href="https://t.me/nkt_aleksandrovich" target="_blank" rel="noopener">EGORKIN DEV</a><button id="th" aria-label="Сменить тему">◐</button></div>
+</header>
 
-<div class="app-container">
+<section class="card">
+ <h2>Дополнительные выплаты</h2>
+ <label>Сумма, ₽<input class="in" type="number" inputmode="decimal" step="any" placeholder="0" data-s="pay"></label>
+</section>
+
+<section class="card">
+ <h2>Смена <span class="chip vi" id="p4" hidden>P4P включён</span></h2>
+ <div class="g2">
+  <label>Формат<select class="in" data-s="fmt"><option>BR</option><option>Plug-in</option></select></label>
+  <label>Должность<select class="in" data-s="pos"><option>JSE</option><option value="SE">SE, SSE</option></select></label>
+ </div>
+ <div class="g2">
+  <label>Часы с обедом<input class="in" type="number" inputmode="decimal" step="any" data-s="hl"></label>
+  <label>Часы без обеда<input class="in" type="number" inputmode="decimal" step="any" data-s="hn"></label>
+ </div>
+ <label>Доп. часы (обучение, брифы)<input class="in" type="number" inputmode="decimal" step="any" data-s="ex"></label>
+</section>
+
+<section class="card">
+ <h2>Ставка</h2>
+ <div class="g2">
+  <label>Ставка в час, ₽<input class="in" type="number" inputmode="decimal" step="any" data-s="rate"></label>
+  <label>Премия в час, ₽<input class="in" type="number" inputmode="decimal" step="any" data-s="prem"></label>
+ </div>
+</section>
+
+<section class="card">
+ <h2>Показатели KPI <span class="chip" id="sw"></span></h2>
+ <div id="kl"></div>
+ <div class="g2 btns"><button class="bt" id="add">Добавить KPI</button><button class="bt" id="eq">Выровнять веса</button></div>
+</section>
+
+<section class="card slip" id="slip">
+ <h2>Итого к выплате</h2>
+ <div class="tot"><span id="big">0,00</span><i>₽</i></div>
+ <div class="mix" id="mix"></div>
+ <div class="lg"><span><u style="background:var(--a)"></u>Оклад</span><span><u style="background:var(--ok)"></u>Бонус</span><span><u style="background:var(--vi)"></u>Допвыплаты</span></div>
+ <div id="bd"></div>
+ <div class="sc" id="sc"></div>
+ <button class="bt" id="cp" style="width:100%">Скопировать расчёт</button>
+</section>
+
+<details class="card">
+ <summary>Правила расчёта</summary>
+ <div class="g2">
   
-  <div class="app-header">
-    <h1 class="app-title">ЗПШКA<span> $</span></h1>
-    <span class="header-badge">EGORKIN DEV</span>
-  </div>
-
-  <!-- Hours & Format -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-        Рабочее время
-      </div>
-    </div>
-    <div class="input-group">
-      <span class="input-label">Формат & Должность</span>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        <select id="format">
-          <option value="BR">BR</option>
-          <option value="MAU">MAU</option>
-        </select>
-        <select id="position">
-          <option value="JSE">JSE</option>
-          <option value="SE">SE, SSE</option>
-        </select>
-      </div>
-    </div>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-      <div class="input-group">
-        <span class="input-label">Часы (с обедом)</span>
-        <input id="hoursWith" type="number" value="160" />
-      </div>
-      <div class="input-group">
-        <span class="input-label">Часы (без обеда)</span>
-        <input id="hoursWithout" type="number" value="150" />
-      </div>
-    </div>
-    <div class="input-group">
-      <span class="input-label">Дополнительные (обучение, брифы)</span>
-      <input id="hoursBuffer" type="number" value="0" />
-    </div>
-  </div>
-
-  <!-- Rate & Premium -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-        Ставки
-      </div>
-    </div>
-    <div class="controls-grid">
-      <div class="input-group">
-        <span class="input-label">Ставка / час (₽)</span>
-        <input id="rateInput" type="text" inputmode="decimal" value="250.00" placeholder="0.00" />
-      </div>
-      <div class="input-group">
-        <span class="input-label">Премия (₽)</span>
-        <input id="premiumInput" type="text" inputmode="decimal" value="250.00" placeholder="0.00" />
-      </div>
-    </div>
-  </div>
-
-  <!-- KPI Section -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-        Показатели KPI
-      </div>
-      <span id="kpiHint" style="font-size: 12px; color: var(--text-tertiary);">Вес: 100%</span>
-    </div>
-    <div class="kpi-grid" id="kpiContainer">
-      <!-- Generated via JS -->
-    </div>
-  </div>
-
-  <!-- Action -->
-  <button class="btn-calc" onclick="calculate()">Посчитать</button>
-
-  <!-- Results -->
-  <div class="card result-card">
-    <div class="result-row">
-      <span class="res-label">Ставка / час</span>
-      <span id="rate" class="res-val">--</span>
-    </div>
-    <div class="result-row">
-      <span class="res-label">Оклад</span>
-      <span id="oklad" class="res-val">--</span>
-    </div>
-    <div class="result-row">
-      <span class="res-label">Бонус</span>
-      <span id="bonus" class="res-val">--</span>
-    </div>
-    <div class="result-row total-row">
-      <span class="res-label">Итого</span>
-      <span id="total" class="res-val">--</span>
-    </div>
-  </div>
   
-</div>
+  <label>Шаг за 1% сверх плана<input class="in" type="number" inputmode="decimal" step="any" data-c="st"></label>
+  <label>Потолок коэффициента<input class="in" type="number" inputmode="decimal" step="any" data-c="cap"></label>
+ </div>
+ <div class="mx"><span></span><b>90–99%</b><b>80–89%</b><b>&lt;80%</b>
+  <span>JSE</span><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="0"><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="1"><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="2">
+  <span>SE, SSE</span><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="0"><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="1"><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="2">
+ </div>
+ <p class="hint">Оклад = ставка × (часы с обедом + доп. часы). База премии = премия в час × часы без обеда. P4P (только Plug-in): ниже 100% коэффициент 0, дальше равен проценту выполнения.</p>
+ <button class="bt" id="rs">Сбросить всё</button>
+</details>
+</main>
+
+<div id="bar" class="h" role="button" tabindex="0"><div><span>Итого к выплате</span><br><b id="bv"></b></div><span>К расчёту ↓</span></div>
 
 <script>
-  (function() {
-    const kpiContainer = document.getElementById('kpiContainer');
-    kpiContainer.innerHTML = '';
-    
-    // Render 4 KPI blocks with built-in P4P toggles
-    for(let i=1; i<=4; i++) {
-      const item = document.createElement('div');
-      item.className = 'kpi-item';
-      item.dataset.index = i;
-      
-      item.innerHTML = `
-        <div class="kpi-title-sm">
-          <span>KPI ${i}</span>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <span id="coeff_${i}" style="color:var(--accent-primary); font-size:11px;">x1.0</span>
-            <label class="p4p-toggle" id="p4pLabel_${i}" title="Включить P4P (для MAU/Plug-in)">
-              <input type="checkbox" id="p4p_${i}" />
-              <span class="check"></span>
-              P4P
-            </label>
-          </div>
-        </div>
-        <div class="kpi-input-group">
-          <input id="w${i}" type="number" placeholder="Вес" value="${i<=2 ? 50 : ''}" />
-          <input id="v${i}" type="number" placeholder="%" value="${i<=2 ? 100 : ''}" />
-        </div>
-      `;
-      kpiContainer.appendChild(item);
+const KEY="zpshka-v2";
+const def=()=>({fmt:"BR",pos:"JSE",hl:160,hn:150,ex:0,rate:250,prem:250,pay:0,
+ k:[{n:"KPI 1",w:50,p:100,q:false},{n:"KPI 2",w:50,p:100,q:false}],
+ c:{st:0.025,cap:1.25,jse:[0.9,0.8,0],se:[0.8,0.6,0]}});
+let S=def();
+try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.k&&r.c)S=Object.assign(def(),r);if(S.fmt==="MAU")S.fmt="Plug-in"}catch(e){}
+const $=id=>document.getElementById(id);
+const N=v=>isFinite(parseFloat(v))?parseFloat(v):0;
+const F=n=>(Math.abs(n)<.005?0:n).toLocaleString("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2});
+const R=n=>F(n)+" ₽";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ep=q=>!!q&&S.fmt==="Plug-in";
+const mx=q=>ep(q)?250:120;
 
-      // Add toggle functionality visually
-      const checkbox = item.querySelector(`#p4p_${i}`);
-      const label = item.querySelector(`#p4pLabel_${i}`);
-      checkbox.addEventListener('change', () => {
-        label.classList.toggle('active', checkbox.checked);
-        calculate(); // Recalculate immediately on toggle
-      });
-    }
+function coef(p,q){
+ const c=S.c,t=S.pos==="JSE"?c.jse:c.se;
+ if(q)return p<100?0:p/100;
+ if(p>100)return Math.min(1+(p-100)*N(c.st),N(c.cap));
+ if(p===100)return 1;
+ return p>=90?N(t[0]):p>=80?N(t[1]):N(t[2]);
+}
+function calc(){
+ const c=S.c,rate=N(S.rate);
+ const oklad=rate*(N(S.hl)+N(S.ex)),base=N(S.prem)*N(S.hn);
+ const on=k=>N(k.w)>0&&String(k.p).trim()!=="",sw=S.k.reduce((a,k)=>a+(on(k)?N(k.w):0),0),valid=sw>0&&Math.abs(sw-100)<=.1;
+ const rows=S.k.map(k=>{const a=on(k),q=ep(k.q),p=N(k.p),f=a?coef(p,q):0;return{n:k.n,w:N(k.w),p,q,f,a,v:a&&valid?base*N(k.w)/sw*f:0,mf:q?2.5:N(c.cap)}});
+ const bonus=rows.reduce((a,r)=>a+r.v,0);
+ const pay=N(S.pay),gross=oklad+bonus+pay;
+ return{rate,oklad,base,rows,bonus,sw,valid,pay,gross,
+  plan:oklad+base+pay,max:oklad+pay+rows.reduce((a,r)=>a+(r.a?base*r.w/sw*r.mf:0),0)};
+}
+const zn=z=>{const m=mx(z),q=v=>(v/m*100).toFixed(1)+"%";
+ return ep(z)?"linear-gradient(90deg,var(--bd) "+q(100)+",var(--vi) 0 100%)":"linear-gradient(90deg,var(--bd) "+q(80)+",var(--wn) 0 "+q(100)+",var(--ok) 0 100%)"};
 
-    // --- DOM Elements ---
-    const rateInput = document.getElementById('rateInput');
-    const premiumInput = document.getElementById('premiumInput');
-    const formatSelect = document.getElementById('format');
-    const positionSelect = document.getElementById('position');
-    const hoursWith = document.getElementById('hoursWith');
-    const hoursWithout = document.getElementById('hoursWithout');
-    const hoursBuffer = document.getElementById('hoursBuffer');
-    const kpiHint = document.getElementById('kpiHint');
-    
-    const rateDisplay = document.getElementById('rate');
-    const okladDisplay = document.getElementById('oklad');
-    const bonusDisplay = document.getElementById('bonus');
-    const totalDisplay = document.getElementById('total');
+function kpis(){
+ $("kl").innerHTML=S.k.map((k,i)=>`<div class="k"><div class="kh"><input class="kn" data-k="${i}" data-f="n" maxlength="28" aria-label="Название KPI" value="${esc(k.n)}">${S.fmt==="Plug-in"?`<label class="pf"><input type="checkbox" data-k="${i}" data-f="q"${k.q?" checked":""}>P4P</label>`:""}<span class="chip" id="cf${i}"></span>${S.k.length>1?`<button class="x" data-del="${i}" aria-label="Удалить KPI">×</button>`:""}</div>
+<div class="g2"><label>Вес, %<input class="in" type="number" inputmode="decimal" step="any" data-k="${i}" data-f="w" value="${k.w}"></label><label>Выполнение, %<input class="in" type="number" inputmode="decimal" step="any" data-k="${i}" data-f="p" value="${k.p}"></label></div>
+<input type="range" min="0" max="${mx(k.q)}" step="1" data-k="${i}" data-f="p" value="${N(k.p)}" aria-label="Выполнение KPI" style="background:${zn(k.q)}">
+<div class="kb"><span>Премия по KPI</span><b id="kv${i}"></b></div></div>`).join("");
+}
 
-    const parseCurrency = (val) => {
-      let num = parseFloat(val.replace(/,/g, '.'));
-      return isNaN(num) ? 0 : num;
-    };
+let shown=0;
+function tween(to){
+ cancelAnimationFrame(tween.id);
+ if(matchMedia("(prefers-reduced-motion:reduce)").matches){shown=to;$("big").textContent=F(to);return}
+ const from=shown,t0=performance.now();
+ const f=t=>{const k=Math.min(1,(t-t0)/450);shown=from+(to-from)*(1-Math.pow(1-k,3));$("big").textContent=F(shown);if(k<1)tween.id=requestAnimationFrame(f)};
+ tween.id=requestAnimationFrame(f);
+}
+const row=(a,b,c="")=>`<div class="r ${c}"><span>${a}</span><i></i><b>${b}</b></div>`;
 
-    const fmtMoney = (n) => Number(n).toFixed(2) + ' ₽';
+function upd(){
+ const r=calc();
+ $("p4").hidden=S.fmt!=="Plug-in";$("p4").textContent="P4P доступен";
+ r.rows.forEach((x,i)=>{
+  const e=$("cf"+i);if(!e)return;
+  e.textContent="×"+(x.a?x.f.toFixed(3):"0.0");
+  e.className="chip "+(!x.a?"":x.f>1?(x.q?"vi":"ok"):x.f===1?"":x.f>0?"wn":"bd");
+  $("kv"+i).textContent=R(x.v);
+ });
+ const ok=r.valid;
+ $("sw").textContent=ok?"Вес 100% ✓":r.sw?"Сумма весов "+(+r.sw.toFixed(2))+"% — нужно 100":"Вес 0%";
+ $("sw").className="chip "+(ok?"ok":r.sw?"bd":"wn");
+ 
+ $("bv").textContent=R(r.gross);
+ tween(r.gross);
+ const tot=Math.max(r.oklad+r.bonus+r.pay,1);
+ $("mix").innerHTML=[["--a",r.oklad],["--ok",r.bonus],["--vi",r.pay]].map(([c,v])=>`<b style="background:var(${c});width:${Math.max(0,v)/tot*100}%"></b>`).join("");
+ $("bd").innerHTML=row("Ставка в час",R(r.rate))+row(`Оклад: ${+(N(S.hl)+N(S.ex)).toFixed(2)} ч`,R(r.oklad))
+  +row(`База премии: ${+N(S.hn).toFixed(2)} ч × ${R(N(S.prem))}`,R(r.base))
+  +r.rows.map(x=>row(`${esc(x.n)}: ${+x.p.toFixed(2)}% → ×${x.f.toFixed(3)}`,R(x.v),"s")).join("")
+  +row("Бонус",R(r.bonus))+(r.pay?row("Дополнительные выплаты",R(r.pay)):"")
+  +row("Итого к выплате",R(r.gross),"t");
+  
+  
+ const d=r.gross-r.plan;
+ $("sc").innerHTML=`<div>К плану<b style="color:var(${d<-.005?"--bd":d>.005?"--ok":"--t"})">${d>.005?"+":""}${F(d)} ₽</b></div><div>План, 100%<b>${F(r.plan)} ₽</b></div><div>Максимум<b>${F(r.max)} ₽</b></div>`;
+ try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+}
+function fill(){
+ document.querySelectorAll("[data-s]").forEach(e=>e.value=S[e.dataset.s]);
+ document.querySelectorAll("[data-c]").forEach(e=>{const d=e.dataset;e.value=d.i!==undefined?S.c[d.c][d.i]:S.c[d.c]});
+ 
+ if(S.th)document.documentElement.dataset.theme=S.th;
+}
 
-    // --- Logic from Matrix with P4P Support ---
-    const getKpiCoefficient = (raw, position, isP4P) => {
-      const v = parseFloat(raw);
-      if (isNaN(v)) return 1;
-      
-      // NEW P4P Logic (Linear growth: 150% = 1.5, 200% = 2.0)
-      if (isP4P) {
-        if (v < 100) return 0; // P4P usually triggers only if target is met
-        return 1 + ((v - 100) / 100); // Example: 220% -> 1 + 1.2 = 2.2
-      }
+document.addEventListener("input",e=>{
+ const t=e.target,d=t.dataset,v=t.value;
+ if(d.s!==undefined){S[d.s]=v;if(d.s==="fmt"||d.s==="pos")kpis()}
+ else if(d.k!==undefined){
+  S.k[d.k][d.f]=d.f==="q"?t.checked:v;if(d.f==="q")kpis();
+  if(d.f==="p")t.closest(".k").querySelectorAll("[data-f=p]").forEach(x=>x.value=v);
+ }else if(d.c!==undefined){if(d.i!==undefined)S.c[d.c][d.i]=N(v);else S.c[d.c]=N(v)}
+ else return;
+ upd();
+});
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button"),d=b?b.dataset:{};
+ if(d.del!==undefined){S.k.splice(+d.del,1);kpis();upd()}
+ 
+});
+$("add").onclick=()=>{if(S.k.length<8){S.k.push({n:"KPI "+(S.k.length+1),w:0,p:100,q:false});kpis();upd()}};
+$("eq").onclick=()=>{const n=S.k.length,w=Math.floor(10000/n)/100;S.k.forEach((k,i)=>k.w=i<n-1?w:+(100-w*(n-1)).toFixed(2));kpis();upd()};
+$("rs").onclick=()=>{S=def();fill();kpis();upd()};
+$("th").onclick=()=>{
+ const root=document.documentElement,dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+ S.th=root.dataset.theme=dark?"light":"dark";upd();
+};
+$("cp").onclick=async()=>{
+ const r=calc(),b=$("cp");
+ const t=["ЗПШКА — расчёт",`${S.fmt}, ${S.pos}: ставка ${R(r.rate)}, оклад ${R(r.oklad)}, база премии ${R(r.base)}`,...r.rows.map(x=>`${x.n}: вес ${x.w}%, выполнение ${x.p}% → ×${x.f.toFixed(3)} = ${R(x.v)}`),...(r.pay?[`Дополнительные выплаты: ${R(r.pay)}`]:[]),`Итого к выплате: ${R(r.gross)}`].join("\n");
+ try{await navigator.clipboard.writeText(t);b.textContent="Скопировано ✓"}catch(e){b.textContent="Не удалось скопировать"}
+ setTimeout(()=>b.textContent="Скопировать расчёт",1800);
+};
+const go=()=>$("slip").scrollIntoView({block:"start"});
+$("bar").onclick=go;$("bar").onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}};
+if(window.IntersectionObserver)new IntersectionObserver(([e])=>$("bar").classList.toggle("h",e.isIntersecting),{threshold:.25}).observe($("slip"));
+else $("bar").classList.remove("h");
 
-      // Standard Matrix Logic (JSE / SE, SSE)
-      if (v < 80) return 0;
-      if (v >= 80 && v < 90) return position === 'JSE' ? 0.8 : 0.6;
-      if (v >= 90 && v < 100) return position === 'JSE' ? 0.9 : 0.8;
-      if (v === 100) return 1;
-      if (v > 100) return Math.min(1 + ((v - 100) * 0.025), 1.25);
-      return 1;
-    };
-
-    const calculate = () => {
-      let totalWeight = 0;
-      let isValid = true;
-      
-      // Validation & Coefficient updates
-      for(let i=1; i<=4; i++) {
-        const w = parseFloat(document.getElementById(`w${i}`).value) || 0;
-        const v = parseFloat(document.getElementById(`v${i}`).value) || 0;
-        const isP4P = document.getElementById(`p4p_${i}`).checked;
-        const coeffEl = document.getElementById(`coeff_${i}`);
-        
-        if(w > 0 && v > 0) {
-          totalWeight += w;
-          const coeff = getKpiCoefficient(v, positionSelect.value, isP4P);
-          coeffEl.textContent = `x${coeff.toFixed(3)}`;
-          
-          // Highlight if it's P4P
-          if(isP4P) {
-            coeffEl.style.color = '#FFD700'; // Gold for P4P
-          } else {
-            coeffEl.style.color = 'var(--accent-primary)';
-          }
-        } else {
-          coeffEl.textContent = `x0.0`;
-        }
-      }
-
-      if(totalWeight > 0 && Math.abs(totalWeight - 100) > 0.1) {
-        kpiHint.style.color = 'var(--danger)'; 
-        kpiHint.textContent = `Ошибка: сумма весов ${totalWeight}%`;
-        isValid = false;
-      } else {
-        kpiHint.style.color = 'var(--text-tertiary)';
-        kpiHint.textContent = totalWeight === 0 ? 'Вес: 0%' : 'Вес: 100% ✓';
-      }
-
-      // Financials
-      const rate = parseCurrency(rateInput.value);
-      const premium = parseCurrency(premiumInput.value);
-      const hw = parseFloat(hoursWith.value) || 0;
-      const hwo = parseFloat(hoursWithout.value) || 0;
-      const buffer = parseFloat(hoursBuffer.value) || 0;
-
-      const finalRate = formatSelect.value === 'MAU' ? rate * 1.10 : rate;
-      const oklad = finalRate * (hw + buffer);
-      const baseBonus = premium * hwo;
-
-      let bonus = 0;
-      if(isValid && totalWeight > 0) {
-        for(let i=1; i<=4; i++) {
-          const w = parseFloat(document.getElementById(`w${i}`).value) || 0;
-          const v = parseFloat(document.getElementById(`v${i}`).value) || 0;
-          const isP4P = document.getElementById(`p4p_${i}`).checked;
-          
-          if(w > 0 && v > 0) {
-            const normalizedWeight = w / totalWeight;
-            bonus += baseBonus * normalizedWeight * getKpiCoefficient(v, positionSelect.value, isP4P);
-          }
-        }
-      }
-
-      // Update UI
-      rateDisplay.textContent = fmtMoney(finalRate);
-      okladDisplay.textContent = fmtMoney(oklad);
-      bonusDisplay.textContent = fmtMoney(bonus);
-      totalDisplay.textContent = fmtMoney(oklad + bonus);
-    };
-
-    // Event Listeners (including watching Format change to auto-hide P4P if needed)
-    document.querySelectorAll('input, select').forEach(el => {
-      el.addEventListener('input', calculate);
-      el.addEventListener('change', calculate);
-    });
-
-    // Auto-hide P4P toggles if Format is BR, Show if MAU
-    formatSelect.addEventListener('change', () => {
-      const isMAU = formatSelect.value === 'MAU';
-      document.querySelectorAll('.p4p-toggle').forEach(el => {
-        el.style.display = isMAU ? 'flex' : 'none';
-        if(!isMAU) el.classList.remove('active');
-      });
-      calculate();
-    });
-    // Trigger format change on load
-    formatSelect.dispatchEvent(new Event('change'));
-
-    // Initial run
-    calculate();
-  })();
+const tg=window.Telegram&&window.Telegram.WebApp,inTg=!!tg&&!!tg.platform&&tg.platform!=="unknown";
+if(inTg){try{
+ tg.ready();tg.expand();
+ if(tg.disableVerticalSwipes)tg.disableVerticalSwipes();
+ const sync=()=>{if(!S.th)document.documentElement.dataset.theme=tg.colorScheme};
+ sync();tg.onEvent("themeChanged",sync);
+}catch(e){}}
+$("dev").onclick=e=>{if(inTg&&tg.openTelegramLink){e.preventDefault();tg.openTelegramLink("https://t.me/nkt_aleksandrovich")}};
+fill();kpis();upd();
 </script>
 </body>
 </html>
