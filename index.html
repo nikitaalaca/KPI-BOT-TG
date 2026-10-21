@@ -11,6 +11,7 @@
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0e1a;--c:#151829;--c2:#0e1020;--l:#262a42;--t:#eef0fa;--m:#8e94b3;--a:#6c8cff;--ok:#4ade9b;--wn:#ffb454;--bd:#ff6b7a;--vi:#a78bfa;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#0c0e1a;--c:#151829;--c2:#0e1020;--l:#262a42;--t:#eef0fa;--m:#8e94b3;--a:#6c8cff;--ok:#4ade9b;--wn:#ffb454;--bd:#ff6b7a;--vi:#a78bfa;color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--t);font:15px/1.45 "Golos Text",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 main{max-width:560px;margin:0 auto;padding:20px 16px 110px}
@@ -48,12 +49,16 @@ input[type=range]::-moz-range-track{background:transparent}
 .btns{margin:2px 0 0}
 a.chip{text-decoration:none;cursor:pointer;transition:opacity .2s}
 a.chip:active{opacity:.6}
-a.dv{display:inline-grid;overflow:hidden;transition:opacity .2s,color .45s,background-color .45s}
+/* кнопка EGORKIN DEV: мягкое свечение + редкий блик, цвет следует за состоянием */
+a.dv{--g:var(--a);position:relative;isolation:isolate;display:inline-grid;overflow:hidden;padding:6px 12px;box-shadow:0 0 0 1px color-mix(in srgb,var(--g) 30%,transparent),0 0 10px color-mix(in srgb,var(--g) 22%,transparent);animation:gl 3.6s ease-in-out infinite;transition:opacity .2s,color .45s,background-color .45s}
+a.dv::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 38%,color-mix(in srgb,var(--g) 40%,transparent) 50%,transparent 62%) -160% 0 / 60% 100% no-repeat;animation:sh 4.2s ease-in-out infinite}
 .dv>span{grid-area:1/1;text-align:center;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s}
 .dv>span+span{transform:translateY(130%);opacity:0}
-.dv[data-st=s]{color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,transparent)}
+a.dv[data-st=s]{--g:var(--ok);color:var(--ok);background-color:color-mix(in srgb,var(--ok) 16%,transparent)}
 .dv[data-st=s]>span:first-child{transform:translateY(-130%);opacity:0}
 .dv[data-st=s]>span+span{transform:none;opacity:1}
+@keyframes gl{50%{box-shadow:0 0 0 1px color-mix(in srgb,var(--g) 60%,transparent),0 0 20px color-mix(in srgb,var(--g) 45%,transparent)}}
+@keyframes sh{0%,55%{background-position:-160% 0}100%{background-position:260% 0}}
 .sp{margin:22px 4px 0;text-align:center;color:var(--m);font-size:12px}
 .sp p{margin:0 0 8px}
 .sb{display:inline-block;padding:6px 12px;border:1px solid var(--l);border-radius:99px;color:var(--m);font-weight:500;text-decoration:none}
@@ -63,15 +68,16 @@ a.dv{display:inline-grid;overflow:hidden;transition:opacity .2s,color .45s,backg
 .pf:has(input:checked){color:var(--vi);border-color:var(--vi);background:color-mix(in srgb,var(--vi) 14%,transparent)}
 .slip{border:1.5px solid var(--a)}
 .in[readonly]{border-style:dashed;background:color-mix(in srgb,var(--a) 9%,var(--c2));cursor:default}
-.pmr{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 0 8px;font-size:12px;color:var(--m);font-weight:500}
 .seg{display:inline-flex;gap:2px;padding:3px;background:var(--c2);border:1px solid var(--l);border-radius:12px}
 .seg label{position:relative;padding:6px 12px;border-radius:9px;font:600 12px "Golos Text",sans-serif;cursor:pointer;white-space:nowrap}
 .seg input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
 .seg label:has(input:checked){color:var(--a);background:color-mix(in srgb,var(--a) 16%,transparent)}
 .seg label:has(input:focus-visible){outline:2px solid var(--a);outline-offset:1px}
-
-
-
+.seg.w{display:flex}
+.seg.w label{flex:1;text-align:center;padding:8px 10px}
+.rb{padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--l)}
+.rt{font:600 12px "Golos Text",sans-serif;color:var(--m);margin:0 0 8px}
+.ln{background:none;border:0;padding:0;font:600 12px "Golos Text",sans-serif;color:var(--a);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .tot{font:800 30px/1.1 Unbounded,"Golos Text",sans-serif;letter-spacing:-.03em;margin:4px 0 14px;word-break:break-all}
 .tot i{font:700 26px "Golos Text",sans-serif;color:var(--a);margin-left:6px}
 .mix{display:flex;height:10px;border-radius:9px;overflow:hidden;gap:2px}
@@ -95,19 +101,12 @@ details[open] summary{margin-bottom:12px}
 #bar.h{transform:translateY(120%)}
 #bar span{font-size:12px;color:var(--m)}
 #bar b{font:700 20px Unbounded,"Golos Text",sans-serif}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-#spl{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--bg);transition:opacity .4s}
+/* заставка: только ровное лого из logo.svg, без вращения и запасных иконок */
+#spl{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:opacity .4s}
 #spl.out{opacity:0;pointer-events:none}
-#spl svg{width:84px;height:84px}
-#spl circle{fill:none;stroke-width:4;stroke-linecap:round;transform-origin:50% 50%}
-#spl .tk{stroke:var(--l)}
-#spl .ar{stroke:var(--a);stroke-dasharray:64 138;animation:spn .9s linear infinite}
-#spl .ar2{stroke:var(--vi);stroke-dasharray:34 104;animation:spn 1.4s linear infinite reverse}
-#spl text{font:700 24px "Golos Text",sans-serif;fill:var(--a)}
-#spl img{width:84px;height:84px;object-fit:contain;animation:spn 1.2s linear infinite}
-#spl i{font:700 12px "Golos Text",sans-serif;font-style:normal;letter-spacing:.32em;text-indent:.32em;color:var(--m)}
-@keyframes spn{to{transform:rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){#spl{display:none}}
+#spl img{width:84px;height:84px;object-fit:contain;opacity:0;transform:scale(.9);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+#spl img.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}a.dv,a.dv::after{animation:none}#spl{display:none}}
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -142,8 +141,7 @@ details[open] summary{margin-bottom:12px}
   <label>Ставка в час, ₽<input class="in" type="number" inputmode="decimal" step="any" data-s="rate"></label>
   <label>Премия в час, ₽<input class="in" id="prem" type="number" inputmode="decimal" step="any" data-s="prem" aria-describedby="ph"></label>
  </div>
- <div class="pmr"><span>Расчёт премии</span><span class="seg" role="radiogroup" aria-label="Расчёт премии"><label><input type="radio" name="pm" value="auto" data-pm>Авто</label><label><input type="radio" name="pm" value="man" data-pm>Вручную</label></span></div>
- <p class="hint" id="ph" style="margin:0"></p>
+ <p class="hint" id="ph" style="margin:0">Премия: <span id="pt"></span> · <button class="ln" id="gr" type="button">настроить</button></p>
 </section>
 
 <section class="card">
@@ -162,11 +160,20 @@ details[open] summary{margin-bottom:12px}
  <button class="bt" id="cp" style="width:100%">Скопировать расчёт</button>
 </section>
 
-<details class="card">
+<details class="card" id="rl">
  <summary>Правила расчёта</summary>
+ <div class="rb">
+  <div class="rt">Развесовка премии</div>
+  <div class="seg w" role="radiogroup" aria-label="Развесовка премии"><label><input type="radio" name="pm" value="auto" data-pm><span id="am">Авто 60/40</span></label><label><input type="radio" name="pm" value="man" data-pm>Ручной ввод</label></div>
+  <div class="g2" id="pa" style="margin:12px 0 0">
+   <label>Доля ставки, %<input class="in" type="number" inputmode="decimal" step="any" data-c="sp" data-i="0"></label>
+   <label>Доля премии, %<input class="in" type="number" inputmode="decimal" step="any" data-c="sp" data-i="1"></label>
+  </div>
+  <label id="pm2" style="margin-top:12px" hidden>Премия в час, ₽<input class="in" type="number" inputmode="decimal" step="any" data-s="prem"></label>
+  <p class="hint" id="ph2" style="margin:10px 0 0"></p>
+  <button class="ln" id="r64" type="button" style="margin-top:8px" hidden>Вернуть 60/40</button>
+ </div>
  <div class="g2">
-  
-  
   <label>Шаг за 1% сверх плана<input class="in" type="number" inputmode="decimal" step="any" data-c="st"></label>
   <label>Потолок без P4P<input class="in" value="×1,25 (110%)" readonly></label>
  </div>
@@ -174,7 +181,7 @@ details[open] summary{margin-bottom:12px}
   <span>JSE</span><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="0"><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="1"><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="2">
   <span>SE, SSE</span><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="0"><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="1"><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="2">
  </div>
- <p class="hint">Оклад = ставка × (часы с обедом + доп. часы). База премии = премия в час × часы без обеда. Премия в час (авто) = ставка × 0,4 ÷ 0,6 (60/40). Без P4P максимум — 110% выполнения (×1,25), выше коэффициент не растёт. P4P (только Plug-in): ниже 100% коэффициент 0, дальше равен проценту выполнения.</p>
+ <p class="hint">Оклад = ставка × (часы с обедом + доп. часы). База премии = премия в час × часы без обеда. Премия в час (авто) = ставка × доля премии ÷ доля ставки (по умолчанию 60/40, доли меняются выше). Без P4P максимум — 110% выполнения (×1,25), выше коэффициент не растёт. P4P (только Plug-in): ниже 100% коэффициент 0, дальше равен проценту выполнения.</p>
  <button class="bt" id="rs">Сбросить всё</button>
 </details>
 <footer class="sp">
@@ -182,7 +189,7 @@ details[open] summary{margin-bottom:12px}
  <a class="sb" id="sup" href="https://pay.cloudtips.ru/p/adb4164d" target="_blank" rel="noopener">Поддержать разработчика</a>
 </footer>
 </main>
-<div id="spl" role="status" aria-label="Загрузка"><svg viewBox="0 0 76 76" aria-hidden="true"><circle class="tk" cx="38" cy="38" r="32"/><circle class="ar" cx="38" cy="38" r="32"/><circle class="ar2" cx="38" cy="38" r="22"/><text x="38" y="47" text-anchor="middle">₽</text></svg><img id="lg" src="logo.svg" alt="" hidden onload="this.hidden=false;this.previousElementSibling.remove()" onerror="this.remove()"><i></i></div>
+<div id="spl" role="status" aria-label="Загрузка"><img src="logo.svg" alt="" onload="this.classList.add('on')" onerror="this.parentNode.remove()"></div>
 
 <div id="bar" class="h" role="button" tabindex="0"><div><span>Итого к выплате</span><br><b id="bv"></b></div><span>К расчёту ↓</span></div>
 
@@ -190,12 +197,12 @@ details[open] summary{margin-bottom:12px}
 const KEY="zpshka-v2";
 const def=()=>({fmt:"BR",pos:"JSE",hl:160,hn:150,ex:0,rate:250,prem:166.67,pm:"auto",pay:0,
  k:[{n:"KPI 1",w:50,p:100,q:false},{n:"KPI 2",w:50,p:100,q:false}],
- c:{st:0.025,jse:[0.9,0.8,0],se:[0.8,0.6,0]}});
+ c:{st:0.025,jse:[0.9,0.8,0],se:[0.8,0.6,0],sp:[60,40]}});
 let S=def();
-try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.k&&r.c)S=Object.assign(def(),r);if(S.fmt==="MAU")S.fmt="Plug-in"}catch(e){}
+try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.k&&r.c){S=Object.assign(def(),r);S.c=Object.assign(def().c,r.c)}if(S.fmt==="MAU")S.fmt="Plug-in"}catch(e){}
 const $=id=>document.getElementById(id);
 const N=v=>isFinite(parseFloat(v))?parseFloat(v):0;
-const PA=r=>N(r)*0.4/0.6,pr=()=>S.pm==="man"?N(S.prem):PA(S.rate);
+const PA=r=>{const a=N(S.c.sp[0]);return a>0?N(r)*N(S.c.sp[1])/a:0},pr=()=>S.pm==="man"?N(S.prem):PA(S.rate);
 S.pm=S.pm==="man"?"man":"auto";
 const F=n=>(Math.abs(n)<.005?0:n).toLocaleString("ru-RU",{minimumFractionDigits:2,maximumFractionDigits:2});
 const R=n=>F(n)+" ₽";
@@ -212,7 +219,7 @@ function coef(p,q){
  return p>=90?N(t[0]):p>=80?N(t[1]):N(t[2]);
 }
 function calc(){
- const c=S.c,rate=N(S.rate);
+ const rate=N(S.rate);
  const oklad=rate*(N(S.hl)+N(S.ex)),base=pr()*N(S.hn);
  const on=k=>N(k.w)>0&&String(k.p).trim()!=="",sw=S.k.reduce((a,k)=>a+(on(k)?N(k.w):0),0),valid=sw>0&&Math.abs(sw-100)<=.1;
  const rows=S.k.map(k=>{const a=on(k),q=ep(k.q),p=N(k.p),f=a?coef(p,q):0;return{n:k.n,w:N(k.w),p,q,f,a,v:a&&valid?base*N(k.w)/sw*f:0,mf:q?2.5:CAP}});
@@ -242,10 +249,12 @@ function tween(to){
 const row=(a,b,c="")=>`<div class="r ${c}"><span>${a}</span><i></i><b>${b}</b></div>`;
 
 function upd(){
- const r=calc(),au=S.pm==="auto",pe=$("prem");
- if(au){S.prem=+PA(S.rate).toFixed(2);pe.value=S.prem}
- pe.readOnly=au;
- $("ph").textContent=au?"Премия = ставка × 0,4 ÷ 0,6 (60/40)":"Премия вводится вручную";
+ const r=calc(),au=S.pm==="auto",sp=S.c.sp,a=+N(sp[0]).toFixed(2),b=+N(sp[1]).toFixed(2),ss=a+"/"+b;
+ if(au)S.prem=+PA(S.rate).toFixed(2);
+ document.querySelectorAll("[data-s=prem]").forEach(e=>{if(e.value!=S.prem)e.value=S.prem;e.readOnly=au});
+ $("pa").hidden=!au;$("pm2").hidden=au;$("r64").hidden=!au||ss==="60/40";
+ $("am").textContent="Авто "+ss;$("pt").textContent=au?"Авто "+ss:"Вручную";
+ $("ph2").textContent=!au?"Введите премию в час вручную: здесь или в блоке «Ставка».":a>0?`Премия в час = ставка × ${b} ÷ ${a} = ${R(pr())}`:"Доля ставки должна быть больше 0.";
  $("p4").hidden=S.fmt!=="Plug-in";$("p4").textContent="P4P доступен";
  r.rows.forEach((x,i)=>{
   const e=$("cf"+i);if(!e)return;
@@ -256,7 +265,6 @@ function upd(){
  const ok=r.valid;
  $("sw").textContent=ok?"Вес 100% ✓":r.sw?"Сумма весов "+(+r.sw.toFixed(2))+"% — нужно 100":"Вес 0%";
  $("sw").className="chip "+(ok?"ok":r.sw?"bd":"wn");
- 
  $("bv").textContent=R(r.gross);
  tween(r.gross);
  const tot=Math.max(r.oklad+r.bonus+r.pay,1);
@@ -266,8 +274,6 @@ function upd(){
   +r.rows.map(x=>row(`${esc(x.n)}: ${+x.p.toFixed(2)}% → ×${x.f.toFixed(3)}`,R(x.v),"s")).join("")
   +row("Бонус",R(r.bonus))+(r.pay?row("Дополнительные выплаты",R(r.pay)):"")
   +row("Итого к выплате",R(r.gross),"t");
-  
-  
  const d=r.gross-r.plan;
  $("sc").innerHTML=`<div>К плану<b style="color:var(${d<-.005?"--bd":d>.005?"--ok":"--t"})">${d>.005?"+":""}${F(d)} ₽</b></div><div>План, 100%<b>${F(r.plan)} ₽</b></div><div>Максимум<b>${F(r.max)} ₽</b></div>`;
  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
@@ -276,17 +282,25 @@ function fill(){
  document.querySelectorAll("[data-s]").forEach(e=>e.value=S[e.dataset.s]);
  document.querySelectorAll("[data-pm]").forEach(e=>e.checked=e.value===S.pm);
  document.querySelectorAll("[data-c]").forEach(e=>{const d=e.dataset;e.value=d.i!==undefined?S.c[d.c][d.i]:S.c[d.c]});
- 
  if(S.th)document.documentElement.dataset.theme=S.th;
 }
 
 document.addEventListener("input",e=>{
  const t=e.target,d=t.dataset,v=t.value;
- if(d.s!==undefined){S[d.s]=v;if(d.s==="fmt"||d.s==="pos")kpis()}
+ if(d.s!==undefined){
+  S[d.s]=v;
+  if(d.s==="prem")document.querySelectorAll("[data-s=prem]").forEach(x=>{if(x!==t)x.value=v});
+  if(d.s==="fmt"||d.s==="pos")kpis();
+ }
  else if(d.pm!==undefined)S.pm=v==="man"?"man":"auto";
  else if(d.k!==undefined){
   S.k[d.k][d.f]=d.f==="q"?t.checked:v;if(d.f==="q")kpis();
   if(d.f==="p")t.closest(".k").querySelectorAll("[data-f=p]").forEach(x=>x.value=v);
+ }else if(d.c==="sp"){
+  const i=+d.i,a=Math.min(100,Math.max(0,N(v)));
+  if(a!==N(v))t.value=a;
+  S.c.sp[i]=a;S.c.sp[1-i]=+(100-a).toFixed(2);
+  document.querySelector(`[data-c=sp][data-i="${1-i}"]`).value=S.c.sp[1-i];
  }else if(d.c!==undefined){if(d.i!==undefined)S.c[d.c][d.i]=N(v);else S.c[d.c]=N(v)}
  else return;
  upd();
@@ -294,11 +308,12 @@ document.addEventListener("input",e=>{
 document.addEventListener("click",e=>{
  const b=e.target.closest("button"),d=b?b.dataset:{};
  if(d.del!==undefined){S.k.splice(+d.del,1);kpis();upd()}
- 
 });
 $("add").onclick=()=>{if(S.k.length<8){S.k.push({n:"KPI "+(S.k.length+1),w:0,p:100,q:false});kpis();upd()}};
 $("eq").onclick=()=>{const n=S.k.length,w=Math.floor(10000/n)/100;S.k.forEach((k,i)=>k.w=i<n-1?w:+(100-w*(n-1)).toFixed(2));kpis();upd()};
 $("rs").onclick=()=>{S=def();fill();kpis();upd()};
+$("r64").onclick=()=>{S.c.sp=[60,40];fill();upd()};
+$("gr").onclick=()=>{const d=$("rl");d.open=true;d.scrollIntoView({block:"start"})};
 $("th").onclick=()=>{
  const root=document.documentElement,dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
  S.th=root.dataset.theme=dark?"light":"dark";upd();
@@ -327,7 +342,7 @@ dv.onclick=ext;$("sup").onclick=ext;
 const setSt=s=>{dv.dataset.st=s;dv.href=s==="s"?DON:TGL;dv.setAttribute("aria-label",s==="s"?"Поддержать разработчика":"Разработчик: EGORKIN DEV")};
 const tick=()=>{setSt(dv.dataset.st==="s"?"n":"s");setTimeout(tick,dv.dataset.st==="s"?2600:4200)};
 if(!matchMedia("(prefers-reduced-motion:reduce)").matches)setTimeout(tick,4200);
-setTimeout(()=>{const s=$("spl");s.classList.add("out");setTimeout(()=>s.remove(),450)},2000);
+setTimeout(()=>{const s=$("spl");if(!s)return;s.classList.add("out");setTimeout(()=>s.remove(),450)},2000);
 fill();kpis();upd();
 </script>
 </body>
