@@ -96,6 +96,18 @@ details[open] summary{margin-bottom:12px}
 #bar span{font-size:12px;color:var(--m)}
 #bar b{font:700 20px Unbounded,"Golos Text",sans-serif}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+#spl{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--bg);transition:opacity .4s}
+#spl.out{opacity:0;pointer-events:none}
+#spl svg{width:84px;height:84px}
+#spl circle{fill:none;stroke-width:4;stroke-linecap:round;transform-origin:50% 50%}
+#spl .tk{stroke:var(--l)}
+#spl .ar{stroke:var(--a);stroke-dasharray:64 138;animation:spn .9s linear infinite}
+#spl .ar2{stroke:var(--vi);stroke-dasharray:34 104;animation:spn 1.4s linear infinite reverse}
+#spl text{font:700 24px "Golos Text",sans-serif;fill:var(--a)}
+#spl img{width:84px;height:84px;object-fit:contain;animation:spn 1.2s linear infinite}
+#spl i{font:700 12px "Golos Text",sans-serif;font-style:normal;letter-spacing:.32em;text-indent:.32em;color:var(--m)}
+@keyframes spn{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#spl{display:none}}
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -103,7 +115,7 @@ details[open] summary{margin-bottom:12px}
 <main>
 <header>
  <div><h1>ЗПШКА<span> ₽</span></h1><p></p></div>
- <div style="display:flex;gap:8px;align-items:center"><a class="chip dv" id="dev" href="https://t.me/nkt_aleksandrovich" target="_blank" rel="noopener" data-st="n" aria-label="Разработчик: EGORKIN DEV"><span>EGORKIN DEV</span><span>ЗАДОНАТИТЬ</span></a><button id="th" aria-label="Сменить тему">◐</button></div>
+ <div style="display:flex;gap:8px;align-items:center"><a class="chip dv" id="dev" href="https://t.me/nkt_aleksandrovich" target="_blank" rel="noopener" data-st="n" aria-label="Разработчик: EGORKIN DEV"><span>EGORKIN DEV</span><span>ПОДДЕРЖКА</span></a><button id="th" aria-label="Сменить тему">◐</button></div>
 </header>
 
 <section class="card">
@@ -170,6 +182,7 @@ details[open] summary{margin-bottom:12px}
  <a class="sb" id="sup" href="https://pay.cloudtips.ru/p/adb4164d" target="_blank" rel="noopener">Поддержать разработчика</a>
 </footer>
 </main>
+<div id="spl" role="status" aria-label="Загрузка"><svg viewBox="0 0 76 76" aria-hidden="true"><circle class="tk" cx="38" cy="38" r="32"/><circle class="ar" cx="38" cy="38" r="32"/><circle class="ar2" cx="38" cy="38" r="22"/><text x="38" y="47" text-anchor="middle">₽</text></svg><img id="lg" src="logo.svg" alt="" hidden onload="this.hidden=false;this.previousElementSibling.remove()" onerror="this.remove()"><i>ЗПШКА</i></div>
 
 <div id="bar" class="h" role="button" tabindex="0"><div><span>Итого к выплате</span><br><b id="bv"></b></div><span>К расчёту ↓</span></div>
 
@@ -314,6 +327,7 @@ dv.onclick=ext;$("sup").onclick=ext;
 const setSt=s=>{dv.dataset.st=s;dv.href=s==="s"?DON:TGL;dv.setAttribute("aria-label",s==="s"?"Поддержать разработчика":"Разработчик: EGORKIN DEV")};
 const tick=()=>{setSt(dv.dataset.st==="s"?"n":"s");setTimeout(tick,dv.dataset.st==="s"?2600:4200)};
 if(!matchMedia("(prefers-reduced-motion:reduce)").matches)setTimeout(tick,4200);
+setTimeout(()=>{const s=$("spl");s.classList.add("out");setTimeout(()=>s.remove(),450)},2000);
 fill();kpis();upd();
 </script>
 </body>
