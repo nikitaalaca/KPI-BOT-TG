@@ -48,6 +48,16 @@ input[type=range]::-moz-range-track{background:transparent}
 .btns{margin:2px 0 0}
 a.chip{text-decoration:none;cursor:pointer;transition:opacity .2s}
 a.chip:active{opacity:.6}
+a.dv{display:inline-grid;overflow:hidden;transition:opacity .2s,color .45s,background-color .45s}
+.dv>span{grid-area:1/1;text-align:center;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s}
+.dv>span+span{transform:translateY(130%);opacity:0}
+.dv[data-st=s]{color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,transparent)}
+.dv[data-st=s]>span:first-child{transform:translateY(-130%);opacity:0}
+.dv[data-st=s]>span+span{transform:none;opacity:1}
+.sp{margin:22px 4px 0;text-align:center;color:var(--m);font-size:12px}
+.sp p{margin:0 0 8px}
+.sb{display:inline-block;padding:6px 12px;border:1px solid var(--l);border-radius:99px;color:var(--m);font-weight:500;text-decoration:none}
+.sb:active{opacity:.6}
 .pf{display:flex;align-items:center;gap:5px;font:700 11px "Golos Text",sans-serif;color:var(--m);padding:3px 9px;border-radius:99px;border:1px solid var(--l);cursor:pointer}
 .pf input{accent-color:var(--vi);margin:0}
 .pf:has(input:checked){color:var(--vi);border-color:var(--vi);background:color-mix(in srgb,var(--vi) 14%,transparent)}
@@ -93,7 +103,7 @@ details[open] summary{margin-bottom:12px}
 <main>
 <header>
  <div><h1>ЗПШКА<span> ₽</span></h1><p></p></div>
- <div style="display:flex;gap:8px;align-items:center"><a class="chip" id="dev" href="https://t.me/nkt_aleksandrovich" target="_blank" rel="noopener">EGORKIN DEV</a><button id="th" aria-label="Сменить тему">◐</button></div>
+ <div style="display:flex;gap:8px;align-items:center"><a class="chip dv" id="dev" href="https://t.me/nkt_aleksandrovich" target="_blank" rel="noopener" data-st="n" aria-label="Разработчик: EGORKIN DEV"><span>EGORKIN DEV</span><span>ЗАДОНАТИТЬ</span></a><button id="th" aria-label="Сменить тему">◐</button></div>
 </header>
 
 <section class="card">
@@ -155,6 +165,10 @@ details[open] summary{margin-bottom:12px}
  <p class="hint">Оклад = ставка × (часы с обедом + доп. часы). База премии = премия в час × часы без обеда. Премия в час (авто) = ставка × 0,4 ÷ 0,6 (60/40). Без P4P максимум — 110% выполнения (×1,25), выше коэффициент не растёт. P4P (только Plug-in): ниже 100% коэффициент 0, дальше равен проценту выполнения.</p>
  <button class="bt" id="rs">Сбросить всё</button>
 </details>
+<footer class="sp">
+ <p>Калькулятор бесплатный. Если он пригодился, можно добровольно поддержать разработчика — на работу калькулятора это не влияет.</p>
+ <a class="sb" id="sup" href="https://pay.cloudtips.ru/p/adb4164d" target="_blank" rel="noopener">Поддержать разработчика</a>
+</footer>
 </main>
 
 <div id="bar" class="h" role="button" tabindex="0"><div><span>Итого к выплате</span><br><b id="bv"></b></div><span>К расчёту ↓</span></div>
@@ -294,7 +308,12 @@ if(inTg){try{
  const sync=()=>{if(!S.th)document.documentElement.dataset.theme=tg.colorScheme};
  sync();tg.onEvent("themeChanged",sync);
 }catch(e){}}
-$("dev").onclick=e=>{if(inTg&&tg.openTelegramLink){e.preventDefault();tg.openTelegramLink("https://t.me/nkt_aleksandrovich")}};
+const DON="https://pay.cloudtips.ru/p/adb4164d",TGL="https://t.me/nkt_aleksandrovich",dv=$("dev");
+const ext=e=>{if(!inTg)return;e.preventDefault();const u=e.currentTarget.href;if(u.startsWith("https://t.me/")&&tg.openTelegramLink)tg.openTelegramLink(u);else if(tg.openLink)tg.openLink(u);else location.href=u};
+dv.onclick=ext;$("sup").onclick=ext;
+const setSt=s=>{dv.dataset.st=s;dv.href=s==="s"?DON:TGL;dv.setAttribute("aria-label",s==="s"?"Поддержать разработчика":"Разработчик: EGORKIN DEV")};
+const tick=()=>{setSt(dv.dataset.st==="s"?"n":"s");setTimeout(tick,dv.dataset.st==="s"?2600:4200)};
+if(!matchMedia("(prefers-reduced-motion:reduce)").matches)setTimeout(tick,4200);
 fill();kpis();upd();
 </script>
 </body>
