@@ -146,13 +146,13 @@ details[open] summary{margin-bottom:12px}
   
   
   <label>Шаг за 1% сверх плана<input class="in" type="number" inputmode="decimal" step="any" data-c="st"></label>
-  <label>Потолок коэффициента<input class="in" type="number" inputmode="decimal" step="any" data-c="cap"></label>
+  <label>Потолок без P4P<input class="in" value="×1,25 (110%)" readonly></label>
  </div>
  <div class="mx"><span></span><b>90–99%</b><b>80–89%</b><b>&lt;80%</b>
   <span>JSE</span><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="0"><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="1"><input class="in" type="number" step="any" inputmode="decimal" data-c="jse" data-i="2">
   <span>SE, SSE</span><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="0"><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="1"><input class="in" type="number" step="any" inputmode="decimal" data-c="se" data-i="2">
  </div>
- <p class="hint">Оклад = ставка × (часы с обедом + доп. часы). База премии = премия в час × часы без обеда. Премия в час (авто) = ставка × 0,4 ÷ 0,6 (60/40). P4P (только Plug-in): ниже 100% коэффициент 0, дальше равен проценту выполнения.</p>
+ <p class="hint">Оклад = ставка × (часы с обедом + доп. часы). База премии = премия в час × часы без обеда. Премия в час (авто) = ставка × 0,4 ÷ 0,6 (60/40). Без P4P максимум — 110% выполнения (×1,25), выше коэффициент не растёт. P4P (только Plug-in): ниже 100% коэффициент 0, дальше равен проценту выполнения.</p>
  <button class="bt" id="rs">Сбросить всё</button>
 </details>
 </main>
@@ -163,7 +163,7 @@ details[open] summary{margin-bottom:12px}
 const KEY="zpshka-v2";
 const def=()=>({fmt:"BR",pos:"JSE",hl:160,hn:150,ex:0,rate:250,prem:166.67,pm:"auto",pay:0,
  k:[{n:"KPI 1",w:50,p:100,q:false},{n:"KPI 2",w:50,p:100,q:false}],
- c:{st:0.025,cap:1.25,jse:[0.9,0.8,0],se:[0.8,0.6,0]}});
+ c:{st:0.025,jse:[0.9,0.8,0],se:[0.8,0.6,0]}});
 let S=def();
 try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.k&&r.c)S=Object.assign(def(),r);if(S.fmt==="MAU")S.fmt="Plug-in"}catch(e){}
 const $=id=>document.getElementById(id);
@@ -174,12 +174,13 @@ const F=n=>(Math.abs(n)<.005?0:n).toLocaleString("ru-RU",{minimumFractionDigits:
 const R=n=>F(n)+" ₽";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ep=q=>!!q&&S.fmt==="Plug-in";
-const mx=q=>ep(q)?250:120;
+const CAP=1.25;
+const mx=q=>ep(q)?250:110;
 
 function coef(p,q){
  const c=S.c,t=S.pos==="JSE"?c.jse:c.se;
  if(q)return p<100?0:p/100;
- if(p>100)return Math.min(1+(p-100)*N(c.st),N(c.cap));
+ if(p>100)return Math.min(1+(p-100)*N(c.st),CAP);
  if(p===100)return 1;
  return p>=90?N(t[0]):p>=80?N(t[1]):N(t[2]);
 }
@@ -187,7 +188,7 @@ function calc(){
  const c=S.c,rate=N(S.rate);
  const oklad=rate*(N(S.hl)+N(S.ex)),base=pr()*N(S.hn);
  const on=k=>N(k.w)>0&&String(k.p).trim()!=="",sw=S.k.reduce((a,k)=>a+(on(k)?N(k.w):0),0),valid=sw>0&&Math.abs(sw-100)<=.1;
- const rows=S.k.map(k=>{const a=on(k),q=ep(k.q),p=N(k.p),f=a?coef(p,q):0;return{n:k.n,w:N(k.w),p,q,f,a,v:a&&valid?base*N(k.w)/sw*f:0,mf:q?2.5:N(c.cap)}});
+ const rows=S.k.map(k=>{const a=on(k),q=ep(k.q),p=N(k.p),f=a?coef(p,q):0;return{n:k.n,w:N(k.w),p,q,f,a,v:a&&valid?base*N(k.w)/sw*f:0,mf:q?2.5:CAP}});
  const bonus=rows.reduce((a,r)=>a+r.v,0);
  const pay=N(S.pay),gross=oklad+bonus+pay;
  return{rate,oklad,base,rows,bonus,sw,valid,pay,gross,
